@@ -1,12 +1,13 @@
 
 using Microsoft.EntityFrameworkCore;
 using MovieApi.Data;
+using MovieApi.Extensions;
 
 namespace MovieApi
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +33,8 @@ namespace MovieApi
 
 
             app.MapControllers();
+
+            await app.SeedData();
 
             app.Run();
         }

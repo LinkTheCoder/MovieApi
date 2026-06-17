@@ -1,6 +1,138 @@
 @MovieApi_HostAddress = http://localhost:5205
 
-GET {{MovieApi_HostAddress}}/movies/
+### ── MOVIES ──────────────────────────────────────────────────────────────────
+
+# Alla filmer
+GET {{MovieApi_HostAddress}}/api/movies
 Accept: application/json
 
 ###
+
+# Filtrera på titel (contains)
+GET {{MovieApi_HostAddress}}/api/movies?title=dark
+Accept: application/json
+
+###
+
+# Filtrera på år
+GET {{MovieApi_HostAddress}}/api/movies?year=1994
+Accept: application/json
+
+###
+
+# Filtrera på genre
+GET {{MovieApi_HostAddress}}/api/movies?genre=Crime
+Accept: application/json
+
+###
+
+# Kombinera filter
+GET {{MovieApi_HostAddress}}/api/movies?year=1994&genre=Crime
+Accept: application/json
+
+###
+
+# En film — bara grunddata
+GET {{MovieApi_HostAddress}}/api/movies/1
+Accept: application/json
+
+###
+
+# En film — med skådespelare
+GET {{MovieApi_HostAddress}}/api/movies/1?withActors=true
+Accept: application/json
+
+###
+
+# En film — med recensioner
+GET {{MovieApi_HostAddress}}/api/movies/1?withReviews=true
+Accept: application/json
+
+###
+
+# En film — med skådespelare + recensioner + detaljer
+GET {{MovieApi_HostAddress}}/api/movies/1?withActors=true&withReviews=true&withDetails=true
+Accept: application/json
+
+###
+
+# En film — full detaljvy (alltid alla relationer)
+GET {{MovieApi_HostAddress}}/api/movies/1/details
+Accept: application/json
+
+###
+
+# Skapa ny film
+POST {{MovieApi_HostAddress}}/api/movies
+Content-Type: application/json
+
+{
+  "title": "Interstellar",
+  "year": 2014,
+  "duration": 169,
+  "genreId": 3
+}
+
+###
+
+# Uppdatera film
+PUT {{MovieApi_HostAddress}}/api/movies/1
+Content-Type: application/json
+
+{
+  "title": "The Dark Knight",
+  "year": 2008,
+  "duration": 152,
+  "genreId": 1
+}
+
+###
+
+# Ta bort film
+DELETE {{MovieApi_HostAddress}}/api/movies/1
+
+###
+
+### ── ACTORS (N:M via MovieActor) ─────────────────────────────────────────────
+
+# Alla skådespelare för en film
+GET {{MovieApi_HostAddress}}/api/movies/1/actors
+Accept: application/json
+
+###
+
+# Koppla skådespelare (id=2) till film (id=3)
+POST {{MovieApi_HostAddress}}/api/movies/3/actors/2
+
+###
+
+# Ta bort koppling
+DELETE {{MovieApi_HostAddress}}/api/movies/3/actors/2
+
+###
+
+### ── REVIEWS (1:M) ────────────────────────────────────────────────────────────
+
+# Alla recensioner för en film
+GET {{MovieApi_HostAddress}}/api/movies/1/reviews
+Accept: application/json
+
+###
+
+# Filtrera recensioner — minst 4 stjärnor
+GET {{MovieApi_HostAddress}}/api/movies/1/reviews?minRating=4
+Accept: application/json
+
+###
+
+# Filtrera recensioner — exakt 5 stjärnor
+GET {{MovieApi_HostAddress}}/api/movies/1/reviews?minRating=5&maxRating=5
+Accept: application/json
+
+###
+
+# Hämta enskild recension
+GET {{MovieApi_HostAddress}}/api/movies/1/reviews/1
+Accept: application/json
+
+######
