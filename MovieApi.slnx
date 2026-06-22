@@ -1,4 +1,6 @@
 <Solution>
-  <Project Path="../TestingMovieWebApi/TestingMovieWebApi.csproj" Id="e1117175-21d6-43da-be4d-94d5fecc63aa" />
+  <Project Path="TestingMovieWebApi/TestingMovieWebApi.csproj" Id="e1117175-21d6-43da-be4d-94d5fecc63aa">
+    <Build Solution="Debug|*" Project="false" />
+  </Project>
   <Project Path="MovieApi.csproj" />
 </Solution>
