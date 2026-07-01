@@ -16,7 +16,8 @@ namespace MovieApi.Controllers
 
         public MoviesController(IMovieService service) => _service = service;
 
-        // GET /api/movies  (filter: ?title=dark  ?year=2008  ?genre=Action)
+        /// <summary>Hämtar en lista med filmer.</summary>
+        /// <remarks>Stöder filtrering via ?title=dark, ?year=2008 och ?genre=Action.</remarks>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<MovieDto>>> GetMovies(
@@ -27,7 +28,8 @@ namespace MovieApi.Controllers
             return Ok(await _service.GetAllMoviesAsync(title, year, genre));
         }
 
-        // GET /api/movies/{id}  (opt: ?withActors=true  ?withReviews=true  ?withDetails=true)
+        /// <summary>Hämtar en specifik film via ID.</summary>
+        /// <remarks>Stöder inkludering via ?withActors, ?withReviews och ?withDetails.</remarks>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -46,7 +48,7 @@ namespace MovieApi.Controllers
             return Ok(dto);
         }
 
-        // GET /api/movies/{id}/details  (alltid full vy)
+        /// <summary>Hämtar fullständiga detaljer för en film via ID.</summary>
         [HttpGet("{id}/details")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -61,8 +63,8 @@ namespace MovieApi.Controllers
             return Ok(dto);
         }
 
-        // POST /api/movies
-        // [ApiController] ger automatiskt 400 om MovieCreateDto-valideringen misslyckas
+        /// <summary>Skapar en ny film.</summary>
+        /// <remarks>Returnerar 400 om GenreId inte refererar till en befintlig genre.</remarks>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -78,8 +80,8 @@ namespace MovieApi.Controllers
             return CreatedAtAction(nameof(GetMovie), new { id = movie!.Id }, movie);
         }
 
-        // PUT /api/movies/{id}
-        // [ApiController] ger automatiskt 400 om MovieUpdateDto-valideringen misslyckas
+        /// <summary>Uppdaterar en befintlig film.</summary>
+        /// <remarks>Returnerar 404 om filmen inte hittas, 400 om GenreId är ogiltigt.</remarks>
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -98,7 +100,7 @@ namespace MovieApi.Controllers
             return NoContent();
         }
 
-        // DELETE /api/movies/{id}
+        /// <summary>Tar bort en film.</summary>
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

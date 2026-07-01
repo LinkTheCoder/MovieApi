@@ -18,6 +18,8 @@ public class AuthController : ControllerBase
         _configuration = configuration;
     }
 
+    /// <summary>Loggar in och returnerar en JWT-token.</summary>
+    /// <remarks>Användarnamn: admin, Lösenord: hemligt (hårdkodad för demo).</remarks>
     [HttpPost("login")]
     public IActionResult Login([FromBody] LoginModel model)
     {
