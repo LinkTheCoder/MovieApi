@@ -7,6 +7,7 @@ using System.Net;
 // Kräver att användaren har ett giltigt JWT 
 public class SecureDataController : ControllerBase
 {
+    /// <summary>Hämtar skyddad data. Kräver ett giltigt JWT.</summary>
     [HttpGet]
     public IActionResult GetSecureData()
     {

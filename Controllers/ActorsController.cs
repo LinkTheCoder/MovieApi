@@ -13,7 +13,7 @@ namespace MovieApi.Controllers
 
         public ActorsController(MovieDbContext context) => _context = context;
 
-        // GET: api/movies/{movieId}/actors
+        /// <summary>Hämtar alla skådespelare för en specifik film.</summary>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -34,8 +34,8 @@ namespace MovieApi.Controllers
                 .ToListAsync();
         }
 
-        // POST: api/movies/{movieId}/actors/{actorId}
-        // Kopplar en befintlig skådespelare till en film
+        /// <summary>Kopplar en befintlig skådespelare till en film.</summary>
+        /// <remarks>Returnerar 409 om skådespelaren redan är kopplad till filmen.</remarks>
         [HttpPost("{actorId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -62,8 +62,7 @@ namespace MovieApi.Controllers
             return NoContent();
         }
 
-        // DELETE: api/movies/{movieId}/actors/{actorId}
-        // Tar bort kopplingen mellan skådespelare och film
+        /// <summary>Tar bort kopplingen mellan en skådespelare och en film.</summary>
         [HttpDelete("{actorId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

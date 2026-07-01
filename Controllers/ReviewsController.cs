@@ -13,8 +13,8 @@ namespace MovieApi.Controllers
 
         public ReviewsController(MovieDbContext context) => _context = context;
 
-        // GET: api/movies/{movieId}/reviews
-        // Frivilliga filter: ?minRating=4  ?maxRating=5
+        /// <summary>Hämtar recensioner för en film.</summary>
+        /// <remarks>Stöder filtrering via ?minRating och ?maxRating.</remarks>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -48,7 +48,7 @@ namespace MovieApi.Controllers
                 .ToListAsync();
         }
 
-        // GET: api/movies/{movieId}/reviews/{id}
+        /// <summary>Hämtar en specifik recension.</summary>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
