@@ -1,3 +1,6 @@
+> [!WARNING]  
+> Preliminär dokumentation som kommer förändras under projektets gång.
+
 # 🎬 MovieApi
 
 A RESTful Web API built with **ASP.NET Core (.NET 10)** and **Entity Framework Core**, using **SQL Server** as the database. Also include testing with xUnit.
