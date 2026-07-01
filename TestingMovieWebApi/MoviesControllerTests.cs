@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using MovieApi.Controllers;
 using MovieApi.DTOs;
@@ -12,7 +13,7 @@ public class MoviesControllerTests
     private static (MoviesController controller, Mock<IMovieService> mock) Build()
     {
         var mock = new Mock<IMovieService>();
-        return (new MoviesController(mock.Object), mock);
+        return (new MoviesController(mock.Object, NullLogger<MoviesController>.Instance), mock);
     }
 
     // ── GET /api/movies ───────────────────────────────────────────────────
