@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MovieApi.Data;
@@ -5,8 +6,9 @@ using MovieApi.DTOs;
 
 namespace MovieApi.Controllers
 {
-    [Route("api/movies/{movieId}/actors")]
+    [Route("api/v{version:apiVersion}/movies/{movieId}/actors")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class ActorsController : ControllerBase
     {
         private readonly MovieDbContext _context;

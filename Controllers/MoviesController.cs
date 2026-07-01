@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Mvc;
 using MovieApi.DTOs;
 using MovieApi.Services;
 
@@ -8,8 +9,9 @@ namespace MovieApi.Controllers
     //   • Returnerar 400 BadRequest om [Required]/[Range]/[StringLength] bryts
     //   • Kräver inte manuell ModelState.IsValid-kontroll
 
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/movies")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class MoviesController : ControllerBase
     {
         private readonly IMovieService _service;
