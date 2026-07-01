@@ -3,68 +3,32 @@
 
 # 🎬 MovieApi
 
-A RESTful Web API built with **ASP.NET Core (.NET 10)** and **Entity Framework Core**, using **SQL Server** as the database. Also include testing with xUnit.
+Ett RESTful Web API byggt med **ASP.NET Core (.NET 10)** och **Entity Framework Core**, som använder **SQL Server** som databas. Stödjer **JWT-autentisering**, **API-versionering** och **Swagger UI**. Inkluderar även enhetstester med **xUnit**.
 
 ---
 
-## 🧱 Tech Stack
+## 🧱 Teknikstack
 
-| Technology | Version |
+| Teknik | Version |
 |---|---|
 | .NET | 10 |
 | ASP.NET Core Web API | 10.0 |
 | Entity Framework Core | 10.0.9 |
 | SQL Server LocalDB | 17.0.4 |
-| xunit | 2.9.3 |
+| Asp.Versioning.Mvc | 10.0.0 |
+| Swashbuckle.AspNetCore | 10.2.3 |
+| Microsoft.AspNetCore.Authentication.JwtBearer | 10.0.9 |
+| System.IdentityModel.Tokens.Jwt | 8.19.1 |
+| xUnit | 2.9.3 |
 | Moq | 4.20.72 |
 
 ---
 
-## 📁 Project Structure
+## 🗂️ Datamodell
 
-```text
-MovieApi/
-├── Controllers/
-│   ├── ActorsController.cs
-│   ├── MoviesController.cs
-│   └── ReviewsController.cs
-├── Data/
-│   └── MovieDbContext.cs
-├── DTOs/
-│   ├── ActorDto.cs
-│   ├── MovieCreateDto.cs
-│   ├── MovieDetailDto.cs
-│   ├── MovieDetailsDto.cs
-│   ├── MovieDto.cs
-│   ├── MovieUpdateDto.cs
-│   └── ReviewDto.cs
-├── Extensions/
-│   └── SeedDataExtensions.cs
-├── Interfaces/
-│   └── IMovieDbContext.cs
-├── Migrations/
-├── Models/
-│   ├── Actor.cs
-│   ├── Genre.cs
-│   ├── Movie.cs
-│   ├── MovieDetails.cs
-│   └── Review.cs
-├── Services/
-│   ├── IMovieService.cs
-│   └── MovieService.cs
-├── appsettings.json
-└── Program.cs
-│
-└── TestingMovieWebApi/             
-    ├── TestingMovieWebApi.csproj
-    └── MoviesControllerTests.cs
-```
+### Entiteter
 
-## 🗂️ Data Model
-
-### Entities
-
-| Entity | Key Fields |
+| Entitet | Nyckelfält |
 |---|---|
 | `Movie` | Id, Title, Year, Duration, GenreId |
 | `Genre` | Id, Name |
@@ -72,55 +36,79 @@ MovieApi/
 | `Review` | Id, ReviewerName, Comment, Rating, MovieId |
 | `Actor` | Id, Name, BirthYear |
 
-### Relationships
+### Relationer
 
-| Type | Description |
+| Typ | Beskrivning |
 |---|---|
-| **N:1** | A `Movie` belongs to one `Genre` |
-| **1:1** | A `Movie` has one `MovieDetails` |
-| **1:M** | A `Movie` has many `Reviews` |
-| **N:M** | `Movie` ↔ `Actor` via the `MovieActor` join table |
+| **N:1** | En `Movie` tillhör en `Genre` |
+| **1:1** | En `Movie` har en `MovieDetails` |
+| **1:M** | En `Movie` kan ha flera `Reviews` |
+| **N:M** | `Movie` ↔ `Actor` via kopplingstabellen `MovieActor` |
 
 ---
 
-## 🧪 Testing
+## 🔐 Autentisering
 
-The `TestingMovieWebApi` project contains unit tests for `MoviesController` using **xUnit** and **Moq**.
+API:t använder **JWT Bearer**-tokens. En token hämtas via login-endpointen och skickas sedan som en **Bearer token** i `Authorization`-headern.
 
-###  Endpoints
+> Demo-inloggning: användarnamn `admin`, lösenord `hemligt`.
 
-| Method | Endpoint | Query params |
+Swagger UI innehåller en inbyggd **Authorize**-knapp för att testa skyddade endpoints.
+
+---
+
+## 🌐 API-endpoints
+
+Alla endpoints är versionshanterade under `/api/v1/`.
+
+### Filmer
+
+| Metod | Endpoint | Query-parametrar |
 |--------|----------|--------------|
-| `GET` | `/api/movies` | `?title=` `?year=` `?genre=` |
-| `GET` | `/api/movies/{id}` | `?withActors=` `?withReviews=` `?withDetails=` |
-| `GET` | `/api/movies/{id}/details` |
-| `POST` | `/api/movies` |
-| `PUT` | `/api/movies/{id}` |
-| `DELETE` | `/api/movies/{id}` |
+| `GET` | `/api/v1/movies` | `?title=` `?year=` `?genre=` |
+| `GET` | `/api/v1/movies/{id}` | `?withActors=` `?withReviews=` `?withDetails=` |
+| `GET` | `/api/v1/movies/{id}/details` | |
+| `POST` | `/api/v1/movies` | |
+| `PUT` | `/api/v1/movies/{id}` | |
+| `DELETE` | `/api/v1/movies/{id}` | |
 
-#### Reviews
+### Recensioner
 
-| Method | Endpoint | Query params |
-|--------|----------|-------------- |
-| `GET` | `/api/movies/{movieId}/reviews` | `?minRating=` `?maxRating=` 
-| `GET` | `/api/movies/{movieId}/reviews/{id}` | 
-#### Actors
+| Metod | Endpoint | Query-parametrar |
+|--------|----------|--------------|
+| `GET` | `/api/v1/movies/{movieId}/reviews` | `?minRating=` `?maxRating=` |
+| `GET` | `/api/v1/movies/{movieId}/reviews/{id}` | |
 
-| Method | Endpoint |
+### Skådespelare
+
+| Metod | Endpoint |
 |--------|----------|
-| `GET` | `/api/movies/{movieId}/actors` |
-| `POST` | `/api/movies/{movieId}/actors/{actorId}` |
-| `DELETE` | `/api/movies/{movieId}/actors/{actorId}` |
+| `GET` | `/api/v1/movies/{movieId}/actors` |
+| `POST` | `/api/v1/movies/{movieId}/actors/{actorId}` |
+| `DELETE` | `/api/v1/movies/{movieId}/actors/{actorId}` |
+
+### Autentisering
+
+| Metod | Endpoint | Beskrivning |
+|--------|----------|-------------|
+| `POST` | `/api/v1/auth/login` | Returnerar en JWT-token |
 
 ---
 
-### 📊 HTTP Status Codes Reference
+## 🧪 Testning
 
-| Code | Meaning |
+Projektet `TestingMovieWebApi` innehåller enhetstester för `MoviesController` med hjälp av **xUnit** och **Moq**.
+
+---
+
+## 📊 Referens för HTTP-statuskoder
+
+| Kod | Betydelse |
 |---|---|
-| `200 OK` | Successful GET |
-| `201 Created` | Resource successfully created (POST) |
-| `204 No Content` | Successful PUT / DELETE |
-| `400 Bad Request` | Validation failed or invalid reference |
-| `404 Not Found` | Resource does not exist |
-| `409 Conflict` | Duplicate relationship |
+| `200 OK` | Lyckad GET-förfrågan |
+| `201 Created` | Resurs skapades framgångsrikt (POST) |
+| `204 No Content` | Lyckad PUT / DELETE |
+| `400 Bad Request` | Validering misslyckades eller ogiltig referens |
+| `401 Unauthorized` | Saknad eller ogiltig JWT-token |
+| `404 Not Found` | Resursen finns inte |
+| `409 Conflict` | Dubblett av relation |
