@@ -30,4 +30,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.2.3" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.19.1" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="TestingMovieWebApi\" />
+  </ItemGroup>
 </Project>

@@ -12,10 +12,12 @@ using System.Text;
 public class AuthController : ControllerBase
 {
     private readonly IConfiguration _configuration;
+    private readonly ILogger<AuthController> _logger;
 
-    public AuthController(IConfiguration configuration)
+    public AuthController(IConfiguration configuration, ILogger<AuthController> logger)
     {
         _configuration = configuration;
+        _logger        = logger;
     }
 
     /// <summary>Loggar in och returnerar en JWT-token.</summary>
@@ -23,9 +25,14 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public IActionResult Login([FromBody] LoginModel model)
     {
+        _logger.LogDebug("Login anropat – användare={Username}", model.Username);
+
         // För enkelhetens skull kör vi en hårdkodad kontroll (ersätt med databas)
         if (model.Username != "admin" || model.Password != "hemligt")
+        {
+            _logger.LogWarning("Misslyckat inloggningsförsök för användare={Username}.", model.Username);
             return Unauthorized("Ogiltiga användaruppgifter.");
+        }
 
         // Skapa "claims" (information vi bakar in i tokenet)
         var claims = new List<Claim>
@@ -46,6 +53,7 @@ public class AuthController : ControllerBase
             signingCredentials: creds
         );
 
+        _logger.LogInformation("Användare {Username} loggade in framgångsrikt.", model.Username);
         return Ok(new { Token = new JwtSecurityTokenHandler().WriteToken(token) });
     }
 }
